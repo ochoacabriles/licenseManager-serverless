@@ -1,0 +1,55 @@
+service: sentinaTest
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  memorysize: 128
+  timeout: 10
+  stage: dev
+  region: us-east-1
+functions:
+  check:
+    handler: handler.check
+    events:
+      - http:
+          path: licensesControl/check # path will be domain.name.com/dev/licensesControl/1
+          method: post
+          cors: true
+  activate:
+    handler: handler.activate # path will be domain.name.com/dev/licensesControl
+    events:
+     - http:
+         path: licensesControl
+         method: put
+         cors: true
+  deactivateOne:
+    handler: handler.deactivateOne
+    events:
+     - http:
+         path: licensesControl/{rigName} # path will be domain.name.com/dev/licensesControl/abc
+         method: delete
+         cors: true
+  deactivateAll:
+    handler: handler.deactivateAll
+    events:
+     - http:
+         path: licensesControl # path will be domain.name.com/dev/licensesControl
+         method: delete
+         cors: true
+  getUpdate:
+      handler: handler.getUpdate
+      events:
+        - http:
+            path: licensesControl # path will be domain.name.com/dev/updateDB
+            method: post
+            cors: true
+  getDBUpdates:
+      handler: handler.getDBUpdates
+      events:
+        - http:
+            path: licensesControl/backup/{time}
+            method: get
+            cors: true
+
+plugins:
+- serverless-offline
