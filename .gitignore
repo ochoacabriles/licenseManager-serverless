@@ -1,6 +1,6 @@
 # sensitive information
 /.env
-/.package-lock.json
+/package-lock.json
 
 # package directories
 /node_modules
