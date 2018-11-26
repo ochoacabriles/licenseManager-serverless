@@ -46,7 +46,7 @@ functions:
   getDBUpdates:
       handler: handler.getDBUpdates
       events:
-        - schedule: rate(1 day)
+        - schedule: rate(24 hours)
 
 plugins:
 - serverless-offline
