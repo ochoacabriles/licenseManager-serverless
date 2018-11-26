@@ -6,6 +6,7 @@ module.exports.uploadData = (orders, callback) => {
   var bulkUpserts = []
   var length = orders.length
   if (length == 0) {
+    console.log('No hay órdenes nuevas')
     return dataProcess.sendResponse('noNewOrders', 200, callback)
   }
   orders.forEach( async (order, i) => {
@@ -32,10 +33,10 @@ module.exports.uploadData = (orders, callback) => {
     }
     bulkUpserts.push(upsertDoc)
     if ( i == length - 1 ) {
-      console.log(JSON.stringify(bulkUpserts))
       try {
         await connectToDatabase()     
         await License.bulkWrite(bulkUpserts) 
+        console.log('%s órdenes actualizadas con éxito', length)
         return dataProcess.sendResponse('ok', 200, callback)
       } catch (err) {
         console.error('Ocurrió un error al actualizar la base de datos: \n %s', err)

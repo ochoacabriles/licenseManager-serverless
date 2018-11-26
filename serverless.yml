@@ -46,10 +46,7 @@ functions:
   getDBUpdates:
       handler: handler.getDBUpdates
       events:
-        - http:
-            path: licensesControl/backup/{time}
-            method: get
-            cors: true
+        - schedule: rate(1 day)
 
 plugins:
 - serverless-offline
