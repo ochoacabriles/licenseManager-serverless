@@ -7,6 +7,39 @@ provider:
   timeout: 10
   stage: prod
   region: us-east-1
+  environment:
+    MONGO_DB_URL: ${self:custom.mongoUri.${self:provider.stage}}
+    API_KEY: ${self:custom.apiKey.${self:provider.stage}}
+    API_PASSWORD: ${self:custom.apiPass.${self:provider.stage}}
+    API_URL: ${self:custom.apiUrl.${self:provider.stage}}
+    ITEM_SKU: ${self:custom.apiUrl.${self:provider.stage}}
+    LAST_VERSION: ${self:custom.lastVersion.${self:provider.stage}}
+    MIN_VERSION: ${self:custom.minVersion.${self:provider.stage}}
+custom:
+  stages:
+    - dev
+    - prod
+  mongoUri:
+    dev: $(ssm:MONGO_DB_URL_DEV)
+    prod: $(ssm:MONGO_DB_URL)
+  apiKey:
+    dev: $(ssm:API_KEY_DEV)
+    prod: $(ssm:API_KEY)
+  apiPass:
+    dev: $(ssm:API_PASSWORD_DEV)
+    prod: $(ssm:API_PASSWORD)
+  apiUrl:
+    dev: $(ssm:API_URL_DEV)
+    prod: $(ssm:API_URL)
+  itemSku:
+    dev: $(ssm:ITEM_SKU_DEV)
+    prod: $(ssm:ITEM_SKU)
+  lastVersion:
+    dev: $(ssm:LAST_VERSION_DEV)
+    prod: $(ssm:LAST_VERSION)
+  minVersion:
+    dev: $(ssm:MIN_VERSION_DEV)
+    prod: $(ssm:MIN_VERSION)
 functions:
   check:
     handler: handler.check
@@ -50,12 +83,3 @@ functions:
 
 plugins:
   - serverless-offline
-  - serverless-domain-manager
-
-custom:
-  customDomain:
-    domainName: featcash.com
-    certificateName: 'featcash.com'
-    basePath: ""
-    stage: prod
-    createRoute53Record: true
